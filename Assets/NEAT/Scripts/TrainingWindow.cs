@@ -9,6 +9,7 @@ public class TrainingManagerWindow : EditorWindow
 	NetworkType loadedType = null;
 	Network loadedNetwork = null;
 
+	Genome loadedGenome = null;
 	GUIStyle networkTypeListStyle = new GUIStyle();
 	[MenuItem("NEAT/Training")]
 	public static void ShowWindow()
@@ -27,20 +28,22 @@ public class TrainingManagerWindow : EditorWindow
 		DrawToolBar();
 		DrawLoadedTypes();
 		if (!DrawNetworkType()) return;
-
+		DrawGenomeList();
+		DrawGenome();
 		DrawNetwork();
 	}
 	void DrawLoadedTypes()
 	{
 		if (NetworkType.networkTypes == null) return;
-		GUILayout.BeginVertical(EditorStyles.textArea);
 		if (!viewNetworkTypes) return;
+		GUILayout.BeginVertical(EditorStyles.helpBox);
 		foreach (NetworkType nt in NetworkType.networkTypes)
 		{
 			if (nt == null) continue;
 			if (GUILayout.Button(nt.name + "  Inputs:  " + nt.inputs + "  Outputs: ", networkTypeListStyle))
 			{
 				loadedType = NetworkType.Load(nt.name);
+
 			}
 		}
 		GUILayout.EndVertical();
@@ -66,10 +69,7 @@ public class TrainingManagerWindow : EditorWindow
 	{
 		showNetwork = EditorGUILayout.Foldout(showNetwork, "Network Visual", true);
 		if (!showNetwork) return;
-		if (loadedNetwork == null)
-		{
-			return;
-		}
+		if (loadedNetwork == null) return;
 		// Begin to draw a horizontal layout, using the helpBox EditorStyle
 		GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
@@ -185,5 +185,61 @@ public class TrainingManagerWindow : EditorWindow
 		}
 		EditorGUI.EndDisabledGroup();
 		GUILayout.EndHorizontal();
+	}
+	bool showGenome = false;
+
+	int selectedGeneration = 0;
+	Vector2 scrollPos;
+	void DrawGenomeList()
+	{
+		if (loadedType == null) return;
+		GUILayout.BeginHorizontal();
+		if (GUILayout.Button("-1", EditorStyles.toolbarButton, GUILayout.Width(30)))
+		{
+			selectedGeneration--;
+		}
+
+		selectedGeneration = EditorGUILayout.DelayedIntField(selectedGeneration, GUILayout.Width(30));
+		if (selectedGeneration > loadedType.generations)
+		{
+			selectedGeneration = loadedType.generations;
+		}
+		if (selectedGeneration < 0)
+		{
+			selectedGeneration = 0;
+		}
+
+
+		if (GUILayout.Button("+1", EditorStyles.toolbarButton, GUILayout.Width(30)))
+		{
+			selectedGeneration++;
+		}
+		GUILayout.EndHorizontal();
+
+		GUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.MinHeight(50));
+		scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(100));
+		for (int i = 0; i < loadedType.genSize; i++)
+		{
+			GUILayout.BeginHorizontal(EditorStyles.helpBox);
+			GUILayout.Label(i.ToString() + ":");
+			GUILayout.Label("");
+			//GUILayout.Label(i.ToString());
+			GUILayout.EndHorizontal();
+		}
+		EditorGUILayout.EndScrollView();
+		GUILayout.EndVertical();
+	}
+	void DrawGenome()
+	{
+		showGenome = EditorGUILayout.Foldout(showGenome, "Genome Visual", true);
+		if (!showGenome) return;
+		if (loadedGenome == null) return;
+
+		// Begin to draw a horizontal layout, using the helpBox EditorStyle
+		GUILayout.BeginVertical(EditorStyles.helpBox);
+
+
+
+		GUILayout.EndVertical();
 	}
 }

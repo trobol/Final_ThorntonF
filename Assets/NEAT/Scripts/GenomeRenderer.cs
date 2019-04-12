@@ -14,4 +14,5 @@ public class GenomeRenderer : EditorWindow
 	{
 		// The actual window code goes here
 	}
+
 }

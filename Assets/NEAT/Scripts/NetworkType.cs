@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 namespace NEAT
 {
@@ -7,6 +8,7 @@ namespace NEAT
 	public class NetworkType
 	{
 		public string name = "Untitled";
+		public int genSize = 100;
 		private static string baseDirectory = Application.dataPath + "/NEAT/Networks/";
 		public bool SetName(string value)
 		{
@@ -27,12 +29,12 @@ namespace NEAT
 		public int inputs = 1, outputs = 1;
 		public int generations;
 		public bool trained = false;
-		NetworkList[] generation;
-		public NetworkType(string n, int gens, NetworkList[] g)
+
+		List<Genome[]> generation;
+		public NetworkType(string n, int gens)
 		{
 			name = n;
 			generations = gens;
-			generation = g;
 		}
 		public NetworkType() { }
 		public NetworkType(NetworkType n)

@@ -3,16 +3,17 @@ namespace NEAT
 	//a connection between two nodes
 	public class Gene
 	{
-		
+		public Gene next;
 	}
 
-	public class ConnectionGene : Gene {
+	public class ConnectionGene : Gene
+	{
 		public int input, //input NodeGene index in Genome
 		output; //output NodeGene index in Genome
 		public float weight;
 		public bool enabled = true;
 		public int inovationNum;
-		
+
 		public ConnectionGene(int input, int output, float weight, int inov)
 		{
 			this.input = input;
@@ -20,10 +21,11 @@ namespace NEAT
 			this.weight = weight;
 			this.inovationNum = inov;
 		}
-		
+
 	}
 
-	public class NodeGene : Gene {
-
+	public class NodeGene : Gene
+	{
+		int id;
 	}
 }
