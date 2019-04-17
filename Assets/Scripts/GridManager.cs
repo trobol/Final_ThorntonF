@@ -12,6 +12,7 @@ public class GridManager : MonoBehaviour
 	GameObject player, alien;
 
 	GameObject tiles, objects;
+	GameObject asteroidPrefab;
 
 	void Awake()
 	{
@@ -26,6 +27,8 @@ public class GridManager : MonoBehaviour
 
 		player = Resources.Load<GameObject>("Player");
 		alien = Resources.Load<GameObject>("Alien");
+
+		asteroidPrefab = Resources.Load<GameObject>("Asteroid");
 		BuildGrid();
 	}
 
@@ -57,8 +60,21 @@ public class GridManager : MonoBehaviour
 		grid.Set(aX, aY, Grid.Type.Alien);
 		alien = Instantiate(alien, new Vector3(aX, aY, 0), Quaternion.identity);
 
-
+		SpawnAsteroids();
 	}
 
+	void SpawnAsteroids()
+	{
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				if (Random.Range(0, 2) > ((new Vector2(x, y) / new Vector2(width, height)) - Vector2.one).magnitude)
+				{
+					asteroids[x, y] = Instantiate(asteroidPrefab, new Vector3(x, y, 0), Quaternion.identity);
+				}
+			}
+		}
+	}
 
 }
