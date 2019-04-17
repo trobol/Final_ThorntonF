@@ -1,39 +1,34 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-
+﻿
 Shader "Custom/Guide"
 {
 	Properties
 	{
-		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
 		_Color ("Tint", Color) = (1,1,1,1)
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
+		_NoiseTex ("Noise", 2D) = "white" {}
 	}
  
 	SubShader
 	{
-        Stencil {
-      		Ref 1
-      		Comp NotEqual
-            Pass keep 
+		Stencil {
+	  		Ref 1
+	  		Comp Equal
+			Pass keep 
    		}
 		Tags
 		{ 
-			"Queue"="Transparent" 
-			"IgnoreProjector"="True" 
+			"Queue"="Transparent+1" 
 			"RenderType"="Transparent" 
-			"PreviewType"="Plane"
 			"CanUseSpriteAtlas"="True"
 		}
 
 		Cull Off
 		Lighting Off
 		ZWrite Off
-		Blend One OneMinusSrcAlpha
-         // Only render pixels whose value in the stencil buffer equals 1.
-      
+		
+		Blend DstAlpha One  // Additive
+		 // Only render pixels whose value in the stencil buffer equals 1.
+	  
 		Pass
 		{
 
@@ -54,7 +49,7 @@ Shader "Custom/Guide"
 			struct v2f
 			{
 				float4 vertex   : SV_POSITION;
-				
+				float2 rot : POSITION1;
 				fixed4 color    : COLOR;
 				float2 texcoord  : TEXCOORD0;
 			};
@@ -67,23 +62,39 @@ Shader "Custom/Guide"
 				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color * _Color;
+				float theta = _Time * 15;
+				OUT.rot.x = sin(theta);
+				OUT.rot.y = cos(theta);
+				
 				return OUT;
 			}
 
-			sampler2D _MainTex;
+			sampler2D _NoiseTex;
 		
 			fixed4 frag(v2f IN) : SV_Target
 			{
-				fixed4 c = tex2D (_MainTex, IN.texcoord) * IN.color;
-				float dist = length(IN.texcoord*2-1);	
-				float b = 1-(sin(1000*(0.05*dist-_Time*0.1))+1)/2;
-				//b *= step(0.1, b);
-				//b -= dist*dist;
+				fixed2 c = IN.texcoord*2-1;
+				c.x = round(c.x*80)/80;
+				c.y = round(c.y*80)/80;
+				float dist = length(c);	
+				float b = sin(100*(0.1*dist-_Time*0.5));
+				float a = step(0.6, b)/2;
 
-				c.a = b;
+				a += step(0.95, b)*0.5;
+				a *= 1-dist*dist;
+
 				
-				c.rgb = c.a;
-				return c;
+				float2 l1 = IN.rot;
+
+				float2 l2 = c;
+
+				float theta = acos(dot(l1, l2) / (length(l1) * length(l2)));
+				
+				float d = step(theta, 0.2)*(0.2-theta)*10;
+				float fade = dist*dist;
+				a += d;
+				a -= fade/2;
+				return IN.color * a;
 			}
 		ENDCG
 		}

@@ -1,17 +1,16 @@
-﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
-
+﻿
 Shader "Custom/TileShader"
 {
 	Properties
 	{
 		[PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
-		
+		_Color ("Tint", Color) = (1,1,1,1)
 		[MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
 	}
  
 	SubShader
 	{
-	Colormask 0 Zwrite Off
+		Colormask A
        Stencil
 		{
 			Ref 1
@@ -31,12 +30,56 @@ Shader "Custom/TileShader"
 		Cull Off
 		Lighting Off
 		ZWrite Off
-		Blend One OneMinusSrcAlpha
+		
+		Blend SrcAlpha OneMinusSrcAlpha
          // Only render pixels whose value in the stencil buffer equals 1.
       
 		Pass
 		{
+			
 
+		CGPROGRAM
+			#pragma vertex vert
+			#pragma fragment frag
+			#pragma multi_compile _ PIXELSNAP_ON
+			#include "UnityCG.cginc"
+			
+			struct appdata_t
+			{
+				float4 vertex   : POSITION;
+				float4 color    : COLOR;
+				float2 texcoord : TEXCOORD0;
+			};
+
+			struct v2f
+			{
+				float4 vertex   : SV_POSITION;
+				fixed4 color    : COLOR;
+				float2 texcoord  : TEXCOORD0;
+			};
+			
+			fixed4 _Color;
+
+			v2f vert(appdata_t IN)
+			{
+				v2f OUT;
+				OUT.vertex = UnityObjectToClipPos(IN.vertex);
+				OUT.texcoord = IN.texcoord;
+				OUT.color = IN.color * _Color;
+				return OUT;
+			}
+
+			sampler2D _MainTex;
+		
+			fixed4 frag(v2f IN) : SV_Target
+			{
+				fixed4 c = tex2D (_MainTex, IN.texcoord) * IN.color;
+
+				c.a += 0.4;
+
+				return c;
+			}
+		ENDCG
 		}
 	}
 }

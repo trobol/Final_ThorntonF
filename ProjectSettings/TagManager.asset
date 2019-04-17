@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Radar
+    uniqueID: 1932583939
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
