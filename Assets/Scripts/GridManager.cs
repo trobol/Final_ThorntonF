@@ -35,7 +35,7 @@ public class GridManager : MonoBehaviour
 	void BuildGrid()
 	{
 		GameObject tile = Resources.Load<GameObject>("Tile");
-		asteroids = new GameObject[width, height];
+		
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
@@ -65,6 +65,7 @@ public class GridManager : MonoBehaviour
 
 	void SpawnAsteroids()
 	{
+		asteroids = new GameObject[width, height];
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)

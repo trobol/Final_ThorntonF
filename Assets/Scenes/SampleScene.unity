@@ -241,6 +241,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 1759195443732466, guid: 8f6e05d814c52c544af74372e7c10dc9, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8f6e05d814c52c544af74372e7c10dc9, type: 2}
   m_IsPrefabAsset: 0
@@ -294,7 +298,7 @@ GameObject:
   - component: {fileID: 1860066466}
   - component: {fileID: 1860066465}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: GridManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -75,10 +75,11 @@ public class PlayerMovement : MonoBehaviour
 	Vector3 moveTarget;
 	void Move()
 	{
-		if (energy > 0 && CanMove())
+		Vector3 target = moveTarget + rotTarget * Vector3.up * -1;
+		if (energy > 0 && CanMove(target))
 		{
 			moveTime = 1;
-			moveTarget = moveTarget + rotTarget * Vector3.up * -1;
+			moveTarget = target;
 			energy--;
 		}
 
@@ -93,10 +94,10 @@ public class PlayerMovement : MonoBehaviour
 		}
 	}
 
-	bool CanMove()
+	bool CanMove(Vector3 t)
 	{
-		int x = (int)(transform.position.x + (transform.up * -1).x),
-			y = (int)(transform.position.y + (transform.up * -1).y);
-		return gridManager.asteroids[x, y] != null;
+		int x = Mathf.RoundToInt(t.x),
+		y = Mathf.RoundToInt(t.y);
+		return gridManager.asteroids[x, y] == null;
 	}
 }

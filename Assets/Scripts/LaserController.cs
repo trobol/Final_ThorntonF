@@ -5,6 +5,7 @@ using UnityEngine;
 public class LaserController : MonoBehaviour
 {
 	public int range = 5;
+	public float animationTime = 0.5f;
 	GameObject[] laserSections;
 
 
@@ -17,6 +18,7 @@ public class LaserController : MonoBehaviour
 		{
 			laserSections[i] = Instantiate(laserPrefab, transform);
 			laserSections[i].transform.position = transform.parent.position + Vector3.up * (-i - 1);
+			laserSections[i].SetActive(false);
 		}
 		Show(5);
 	}
@@ -26,9 +28,18 @@ public class LaserController : MonoBehaviour
 	{
 
 	}
-
-	void Show(int distance)
+	int distance = 5;
+	void Show(int d)
 	{
+		distance = d;
+		StartCoroutine("ShootLaser");
+	}
 
+
+	IEnumerator ShootLaser() {
+		for(int i = 0; i < distance; i++) {
+			laserSections[i].SetActive(true);
+			yield return new WaitForSeconds(animationTime);
+		}
 	}
 }
