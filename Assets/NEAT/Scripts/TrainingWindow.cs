@@ -73,8 +73,7 @@ public class TrainingManagerWindow : EditorWindow
 		// Begin to draw a horizontal layout, using the helpBox EditorStyle
 		GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-		// Reserve GUI space with a width from 10 to 10000, and a fixed height of 200, and 
-		// cache it as a rectangle.
+		
 		Rect layoutRectangle = GUILayoutUtility.GetRect(10, 10000, 200, 200);
 		if (Event.current.type == EventType.Repaint)
 		{

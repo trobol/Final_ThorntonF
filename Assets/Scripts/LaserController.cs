@@ -5,9 +5,10 @@ using UnityEngine;
 public class LaserController : MonoBehaviour
 {
 	public int range = 5;
-	public float animationTime = 0.5f;
+	public float animationTime = 0.5f, endTime = 0.3f;
+    PlayerMovement player;
 	GameObject[] laserSections;
-
+    SpriteRenderer spriteRenderer;
 
 	// Use this for initialization
 	void Start()
@@ -20,7 +21,8 @@ public class LaserController : MonoBehaviour
 			laserSections[i].transform.position = transform.parent.position + Vector3.up * (-i - 1);
 			laserSections[i].SetActive(false);
 		}
-		Show(5);
+        player = transform.parent.GetComponent<PlayerMovement>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 	}
 
 	// Update is called once per frame
@@ -29,10 +31,11 @@ public class LaserController : MonoBehaviour
 
 	}
 	int distance = 5;
-	void Show(int d)
+	public void Show(int d)
 	{
 		distance = d;
 		StartCoroutine("ShootLaser");
+        spriteRenderer.enabled = true;
 	}
 
 
@@ -41,5 +44,13 @@ public class LaserController : MonoBehaviour
 			laserSections[i].SetActive(true);
 			yield return new WaitForSeconds(animationTime);
 		}
-	}
+        yield return new WaitForSeconds(endTime);
+        for (int i = 0; i < distance; i++)
+        {
+            laserSections[i].SetActive(false);
+           
+        }
+        player.EndShoot();
+        spriteRenderer.enabled = false;
+    }
 }
