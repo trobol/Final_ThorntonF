@@ -1,31 +1,23 @@
 namespace NEAT
 {
 	//a connection between two nodes
-	public class Gene
-	{
-		public Gene next;
-	}
-
-	public class ConnectionGene : Gene
+	public class ConnectionGene
 	{
 		public int input, //input NodeGene index in Genome
 		output; //output NodeGene index in Genome
-		public float weight;
+		public double weight;
 		public bool enabled = true;
-		public int inovationNum;
-
-		public ConnectionGene(int input, int output, float weight, int inov)
+		public int inovation;
+		static public int inovationNum = 1;
+		public ConnectionGene(int input, int output, double weight)
 		{
 			this.input = input;
 			this.output = output;
 			this.weight = weight;
-			this.inovationNum = inov;
+			this.inovation = inovationNum++;
 		}
 
+
 	}
 
-	public class NodeGene : Gene
-	{
-		int id;
-	}
 }

@@ -7,6 +7,9 @@ public class Grid
 {
 	public int width, height;
 	public Type[,] grid;
+
+
+	public GridRender render;
 	public Grid(int w, int h)
 	{
 		grid = new Type[w, h];
@@ -16,17 +19,17 @@ public class Grid
 		{
 			for (int y = 0; y < height; y++)
 			{
-				grid[x, y] = Type.Empty;
+				grid[x, y] = Type.None;
 			}
 		}
 	}
 
 	public enum Type
 	{
-		Empty = 1,
-		Player = 2,
-		Alien = 3,
-		Asteroid = 4
+		None = 0,
+		Asteroid = 1,
+		Alien = 2,
+		Player = 3
 	}
 
 	public void Set(int x, int y, Type t)
@@ -39,7 +42,28 @@ public class Grid
 	}
 	public bool IsEmpty(int x, int y)
 	{
-		return grid[x, y] == Type.Empty;
+		return grid[x, y] == Type.None;
 	}
+
+	public void UpdateRender()
+	{
+		if (render == null) return;
+
+		render.UpdateGrid();
+	}
+
+	public int[] AsArray()
+	{
+		int[] a = new int[width * height];
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				a[height * x + y] = (int)grid[x, y];
+			}
+		}
+		return a;
+	}
+
 
 }

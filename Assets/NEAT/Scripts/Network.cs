@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Network : MonoBehaviour {
-	
+namespace NEAT
+{
+	public class Network
+	{
+		Network(Genome g)
+		{
+
+		}
+	}
 }

@@ -7,7 +7,7 @@ public class TrainingManagerWindow : EditorWindow
 
 {
 	NetworkType loadedType = null;
-	Network loadedNetwork = null;
+	NEAT.Network loadedNetwork = null;
 
 	Genome loadedGenome = null;
 	GUIStyle networkTypeListStyle = new GUIStyle();
@@ -73,7 +73,7 @@ public class TrainingManagerWindow : EditorWindow
 		// Begin to draw a horizontal layout, using the helpBox EditorStyle
 		GUILayout.BeginHorizontal(EditorStyles.helpBox);
 
-		
+
 		Rect layoutRectangle = GUILayoutUtility.GetRect(10, 10000, 200, 200);
 		if (Event.current.type == EventType.Repaint)
 		{
@@ -182,6 +182,21 @@ public class TrainingManagerWindow : EditorWindow
 		{
 			loadedType = new NetworkType(loadedType);
 		}
+		if (!TrainingController.training)
+		{
+			if (GUILayout.Button("Train", EditorStyles.toolbarButton))
+			{
+				TrainingController.Start(loadedType);
+			}
+		}
+		else
+		{
+			if (GUILayout.Button("Stop", EditorStyles.toolbarButton))
+			{
+				TrainingController.Stop();
+			}
+		}
+
 		EditorGUI.EndDisabledGroup();
 		GUILayout.EndHorizontal();
 	}
@@ -216,16 +231,23 @@ public class TrainingManagerWindow : EditorWindow
 		GUILayout.EndHorizontal();
 
 		GUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.MinHeight(50));
-		scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(100));
-		for (int i = 0; i < loadedType.genSize; i++)
+		if (loadedType.generations > 0)
 		{
-			GUILayout.BeginHorizontal(EditorStyles.helpBox);
-			GUILayout.Label(i.ToString() + ":");
-			GUILayout.Label("");
-			//GUILayout.Label(i.ToString());
-			GUILayout.EndHorizontal();
+			scrollPos = EditorGUILayout.BeginScrollView(scrollPos, GUILayout.Height(100));
+			for (int i = 0; i < loadedType.population; i++)
+			{
+				GUILayout.BeginHorizontal(EditorStyles.helpBox);
+				GUILayout.Label(i.ToString() + ":");
+				GUILayout.Label("Fitness: " + loadedType.generation[selectedGeneration][i].fitness.ToString());
+
+				GUILayout.EndHorizontal();
+			}
+			EditorGUILayout.EndScrollView();
 		}
-		EditorGUILayout.EndScrollView();
+		else
+		{
+			GUILayout.Label("Start training the network to view the population");
+		}
 		GUILayout.EndVertical();
 	}
 	void DrawGenome()

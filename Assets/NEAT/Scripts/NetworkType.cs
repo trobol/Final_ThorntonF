@@ -8,7 +8,6 @@ namespace NEAT
 	public class NetworkType
 	{
 		public string name = "Untitled";
-		public int genSize = 100;
 		private static string baseDirectory = Application.dataPath + "/NEAT/Networks/";
 		public bool SetName(string value)
 		{
@@ -30,7 +29,9 @@ namespace NEAT
 		public int generations;
 		public bool trained = false;
 
-		List<Genome[]> generation;
+		public int population = 100;
+
+		public List<Genome[]> generation;
 		public NetworkType(string n, int gens)
 		{
 			name = n;

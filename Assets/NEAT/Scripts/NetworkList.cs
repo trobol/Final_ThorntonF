@@ -5,7 +5,7 @@ using System.Collections;
 public class NetworkList : EditorWindow
 
 {
-	Network selectedNetwork;
+	NEAT.Network selectedNetwork;
 	string myString = "Hello World";
 	bool groupEnabled;
 	bool myBool = true;
