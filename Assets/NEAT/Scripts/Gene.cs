@@ -19,5 +19,15 @@ namespace NEAT
 
 
 	}
-
+	public class NodeGene
+	{
+		public int id;
+		public ConnectionGene[] inputs, outputs;
+		public int inputCount, outputCount;
+		public NodeType type;
+		public NodeGene(int i)
+		{
+			id = i;
+		}
+	}
 }

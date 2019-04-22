@@ -1,7 +1,8 @@
-
+using System.Collections.Generic;
 namespace NEAT
 {
 	//linear representation of a network
+	[System.Serializable]
 	public class Genome
 	{
 		static System.Random random = new System.Random();
@@ -12,36 +13,94 @@ namespace NEAT
 				preturbChance = 90;
 
 
-		ConnectionGene[] genes;
+		ConnectionGene[] connections;
+		NodeGene[] nodes;
 		ConnectionGene first, last;
 		public static int inov = 0;
 		public float fitness = 0;
-		public int size;
+		public int size, nodeCount = 0;
+		public NetworkType type;
 		public Genome(NetworkType nt)
 		{
+			type = nt;
 			size = nt.inputs * nt.outputs;
 			for (int i = 0; i < nt.inputs; i++)
 			{
 				for (int o = 0; o < nt.outputs; o++)
 				{
-					genes[i * nt.inputs + o] = new ConnectionGene(i, o, 1);
+					connections[i * nt.inputs + o] = new ConnectionGene(i, nt.inputs + o, 1);
 				}
 			}
+			BuildNodes();
 		}
 
 		public Genome(Genome g)
 		{
-			size = g.genes.Length;
-			genes = new ConnectionGene[g.genes.Length];
-			for (int a = 0; a < g.genes.Length; a++)
+
+			size = g.connections.Length;
+			connections = new ConnectionGene[g.connections.Length];
+			for (int a = 0; a < g.connections.Length; a++)
 			{
-				genes[a] = g.genes[a];
+				connections[a] = g.connections[a];
 			}
 		}
 		public Genome(int s)
 		{
-			genes = new ConnectionGene[s];
+			connections = new ConnectionGene[s];
 			size = s;
+		}
+		public Genome(ref ConnectionGene[] cg, NetworkType nt)
+		{
+			size = cg.Length;
+			connections = cg;
+			type = nt;
+			BuildNodes();
+		}
+		void BuildNodes()
+		{
+			List<NodeGene> nodeList = new List<NodeGene>();
+			nodeCount += type.inputs + type.outputs;
+			for (int a = 0; a < connections.Length; a++)
+			{
+				NodeGene input = FindNodeGene(connections[a].input, ref nodeList),
+						output = FindNodeGene(connections[a].output, ref nodeList);
+
+
+			}
+
+			//Add input and output node (0 -> type.inputs + type.outputs)
+			for (int i = 0; i < nodeCount; i++)
+			{
+				NodeGene n = new NodeGene(i);
+				n.type = i < type.inputs ? NodeType.input : NodeType.output;
+			}
+		}
+		//nodeList should always be sorted
+		NodeGene FindNodeGene(int id, ref List<NodeGene> nodeList)
+		{
+			//empty list
+			if (nodeList.Count <= 0)
+			{
+				nodeList.Add(new NodeGene(id));
+				return nodeList[0];
+			}
+			for (int i = 0; i < nodeList.Count; i++)
+			{
+				//existing node found
+				if (id == nodeList[i].id)
+				{
+					return nodeList[i];
+				}
+				//list does not contain node
+				else if (id > nodeList[i].id)
+				{
+					nodeList.Insert(i, new NodeGene(id));
+					return nodeList[i];
+				}
+			}
+			//node id is smaller then all nodes in list
+			nodeList.Insert(0, new NodeGene(id));
+			return nodeList[0];
 		}
 		public static Genome Mutate(Genome g0)
 		{
@@ -56,12 +115,12 @@ namespace NEAT
 				if (random.Next(100) <= preturbChance)
 				{
 					//uniformly preturb weight
-					g.genes[i].weight *= random.NextDouble() - 0.5;
+					g.connections[i].weight *= random.NextDouble() - 0.5;
 				}
 				else
 				{
 					//change weight to random value
-					g.genes[i].weight += random.NextDouble() - 0.5;
+					g.connections[i].weight += random.NextDouble() - 0.5;
 				}
 			}
 
@@ -70,15 +129,11 @@ namespace NEAT
 		}
 		public static Genome Crossover(Genome g1, Genome g2)
 		{
-
-
-
-			Genome g0;
 			//g1 = more fit g2 = less fit
 			if (g1.fitness < g2.fitness)
 			{
 				//swap g1 and g2
-				g0 = g1;
+				Genome g0 = g1;
 				g1 = g2;
 				g2 = g0;
 			}
@@ -86,11 +141,11 @@ namespace NEAT
 			//index of the last matching gene
 			int maxMatching = 0,
 				//highest invation in g1
-				maxInov = g1.genes[g1.size - 1].inovation;
+				maxInov = g1.connections[g1.size - 1].inovation;
 
 			for (int i = 0; i < g1.size; i++)
 			{
-				if (g1.genes[i].inovation != g2.genes[i].inovation) break;
+				if (g1.connections[i].inovation != g2.connections[i].inovation) break;
 				maxMatching++;
 			}
 
@@ -98,14 +153,15 @@ namespace NEAT
 
 			int size = equalFitness ? g1.size + (g2.size - maxMatching) : g1.size;
 
-			g0 = new Genome(size);
+			ConnectionGene[] resultConnections = new ConnectionGene[size];
+
 
 
 			for (int i = 0; i < maxMatching; i++)
 			{
-				g0.genes[i] = random.Next(1) > 0 ? g1.genes[i] : g2.genes[i];
+				resultConnections[i] = random.Next(1) > 0 ? g1.connections[i] : g2.connections[i];
 			}
-			//add disjoint and exess genes
+			//add disjoint and exess connections
 			if (!equalFitness)
 			{
 				//add from more fit parent
@@ -124,35 +180,35 @@ namespace NEAT
 
 					if (g1Index >= g1.size)
 					{
-						g0.genes[i] = g2.genes[g2Index];
+						resultConnections[i] = g2.connections[g2Index];
 						g2Index++;
 					}
 					else if (g2Index >= g2.size)
 					{
-						g0.genes[i] = g1.genes[g1Index];
+						resultConnections[i] = g1.connections[g1Index];
 						g1Index++;
 					}
 					else
 					{
 						//add the gene with the lowest inovation
-						int inov1 = g1.genes[g1Index].inovation,
-						inov2 = g2.genes[g2Index].inovation;
+						int inov1 = g1.connections[g1Index].inovation,
+						inov2 = g2.connections[g2Index].inovation;
 
 						if (inov1 > inov2)
 						{
-							g0.genes[i] = g2.genes[g2Index];
+							resultConnections[i] = g2.connections[g2Index];
 							g2Index++;
 
 						}
 						else
 						{
-							g0.genes[i] = g1.genes[g1Index];
+							resultConnections[i] = g1.connections[g1Index];
 							g1Index++;
 						}
 					}
 				}
 			}
-			return g0;
+			return new Genome(ref resultConnections, g1.type);
 		}
 
 	}
