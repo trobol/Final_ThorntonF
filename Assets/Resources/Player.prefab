@@ -73,7 +73,7 @@ GameObject:
   - component: {fileID: 114108684994301852}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -178,7 +178,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energy: 5
   energyPool: 5
-  radar: {fileID: 0}
   rotTime: 0
   rotSpeed: 2
   rotTarget: {x: 0, y: 0, z: 0, w: 0}

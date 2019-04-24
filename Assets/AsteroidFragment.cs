@@ -5,12 +5,16 @@ using UnityEngine;
 public class AsteroidFragment : MonoBehaviour
 {
 
-	public float speed;
+	public static float speed = 0.05f;
 
 	float time = 1;
+	float direction;
+	void Start() {
+		direction = Random.Range(-1, 1);
+	}
 	void Update()
 	{
 		time += Time.deltaTime;
-		transform.localScale += time * Vector3.one * speed;
+		transform.localScale += time * Vector3.one * speed * direction;
 	}
 }

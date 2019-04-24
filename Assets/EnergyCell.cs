@@ -10,9 +10,13 @@ public class EnergyCell : MonoBehaviour
 	{
 		Invoke("ActivateInner", delay);
 	}
-	public void Deactivate()
+	public void Deactivate(float delay)
 	{
+		//Invoke("DeactivateInner", delay);
 		inner.SetActive(false);
+	}
+	void DeactivateInner() {
+
 	}
 	void ActivateInner()
 	{
