@@ -11,7 +11,7 @@ public class GridManager : MonoBehaviour
 
 
 	GameObject player, alien;
-
+	public GridTile playerTile, alienTile;
 	GameObject asteroidPrefab;
 
 	public GridRender gridRender;
@@ -45,7 +45,7 @@ public class GridManager : MonoBehaviour
 		int pX = Random.Range(0, width),
 			pY = Random.Range(0, height);
 
-		grid.Set(pX, pY, Grid.Type.Player);
+		playerTile = new GridTile(grid, Grid.Type.Player, pX, pY);
 
 
 		int aX = Random.Range(0, width),
@@ -54,7 +54,7 @@ public class GridManager : MonoBehaviour
 		{
 			aX = Random.Range(0, width);
 		}
-		grid.Set(aX, aY, Grid.Type.Alien);
+		alienTile = new GridTile(grid, Grid.Type.Alien, aX, aY);
 
 
 		for (int x = 0; x < grid.width; x++)
@@ -69,5 +69,4 @@ public class GridManager : MonoBehaviour
 			}
 		}
 	}
-
 }

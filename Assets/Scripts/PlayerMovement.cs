@@ -91,6 +91,7 @@ public class PlayerMovement : MonoBehaviour
 			moveTarget = target;
 			energy--;
 
+			gridManager.playerTile.Move(target);
 		}
 
 	}
@@ -113,6 +114,7 @@ public class PlayerMovement : MonoBehaviour
 		if (shooting) return false;
 		int x = Mathf.RoundToInt(t.x),
 		y = Mathf.RoundToInt(t.y);
+		Debug.Log(gridManager.grid.Get(x, y));
 		return gridManager.grid.Get(x, y) == Grid.Type.None;
 	}
 
@@ -135,6 +137,7 @@ public class PlayerMovement : MonoBehaviour
 			if (a != null)
 			{
 				a.GetComponent<AsteroidController>().BlowUp();
+				gridManager.grid.Set(x, y, Grid.Type.None);
 				energy++;
 				break;
 			}
