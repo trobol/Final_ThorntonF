@@ -467,7 +467,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!114 &114102782454880400
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -479,7 +478,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!114 &114117266469556988
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -491,7 +489,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!114 &114204927192100454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -503,7 +500,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bc7a3fd6ecbebe418d5c47f7a9f8eac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  force: 3
+  force: 6
 --- !u!114 &114354301892068350
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -515,7 +512,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!114 &114493623932480796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -527,7 +523,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!114 &114551733671808050
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -539,7 +534,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!114 &114792145825065380
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -551,7 +545,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!114 &114866154450360088
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -563,7 +556,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1977ce8f70b556d4d86ef9ce2cf9075a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 0.1
 --- !u!212 &212256387590915448
 SpriteRenderer:
   m_ObjectHideFlags: 1

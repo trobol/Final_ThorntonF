@@ -5,17 +5,39 @@ using UnityEngine;
 public class EnergyCell : MonoBehaviour
 {
 
-	public GameObject inner;
-	public void Activate(float delay)
+	public InnerEnergy inner;
+    public bool activated = false;
+   
+    public void Activate(float delay)
 	{
-		Invoke("ActivateInner", delay);
-	}
-	public void Deactivate()
+        if (!activated)
+        {
+            Invoke("ActivateInner", delay);
+        }
+        activated = true;
+    }
+	public void Deactivate(float delay)
 	{
-		inner.SetActive(false);
+        if (activated)
+        {
+
+            DeactivateInner();
+            activated = false;
+        }
+    }
+	void DeactivateInner() {
+        inner.Deactivate();
 	}
 	void ActivateInner()
 	{
-		inner.SetActive(true);
+        inner.Activate();
 	}
+    public void Anim(float delay)
+    {
+        Invoke("StartAnim", delay);
+    }
+    void StartAnim() 
+    {
+        GetComponent<Animator>().enabled = true;
+    }
 }

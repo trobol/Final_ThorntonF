@@ -92,6 +92,7 @@ public class PlayerMovement : MonoBehaviour
 			energy--;
 
 			gridManager.playerTile.Move(target);
+			gridManager.hud.UpdateEnergy();
 		}
 
 	}
@@ -130,19 +131,19 @@ public class PlayerMovement : MonoBehaviour
 			Vector3 targetTile = moveTarget + rotTarget * Vector3.up * (-i - 1);
 			int x = Mathf.RoundToInt(targetTile.x),
 				   y = Mathf.RoundToInt(targetTile.y);
-			Debug.Log(x);
-			Debug.Log(y);
 			if (x < 0 || x >= gridManager.width || y < 0 || y >= gridManager.height) break;
-			GameObject a = gridManager.asteroids[x, y];
-			if (a != null)
-			{
+			if(gridManager.grid.Get(x,y) == Grid.Type.Asteroid) {
+				GameObject a = gridManager.asteroids[x, y];
 				a.GetComponent<AsteroidController>().BlowUp();
 				gridManager.grid.Set(x, y, Grid.Type.None);
-				energy++;
+				energyPool++;
+                energy--;
 				break;
 			}
+			
 		}
-		laser.Show(i);
+        gridManager.hud.UpdateEnergy();
+        laser.Show(i);
 	}
 	public void EndShoot()
 	{

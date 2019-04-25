@@ -5,13 +5,13 @@ using UnityEngine;
 public class HudController : MonoBehaviour
 {
 
-	public GameObject energyCellPrefab, energyContainer;
+	GameObject energyCellPrefab, energyContainer;
 
 	void Start()
 	{
 		energyCellPrefab = Resources.Load<GameObject>("EnergyCell");
 		energyContainer = transform.Find("EnergyContainer").gameObject;
-		playerObject = GameObject.Find("Player(Clone)");
+		playerObject = GameObject.FindGameObjectWithTag("Player");
 		player = playerObject.GetComponent<PlayerMovement>();
 		UpdateEnergy();
 	}
@@ -23,13 +23,27 @@ public class HudController : MonoBehaviour
 	}
 	GameObject playerObject;
 	PlayerMovement player;
-	List<GameObject> energyCells;
+	List<GameObject> energyCells = new List<GameObject>();
 
-	void UpdateEnergy()
+	public void UpdateEnergy()
 	{
 		if (player.energyPool > energyCells.Count)
 		{
-			energyCells.Add(Instantiate(energyCellPrefab, energyContainer.transform));
+            for (int i = 0; player.energyPool > energyCells.Count; i++)
+            {
+               GameObject g = Instantiate(energyCellPrefab, energyContainer.transform);
+                energyCells.Add(g);
+                g.GetComponent<EnergyCell>().Anim(((float)i) / 5);
+            }
+		}
+		
+		for(int i =0; i < energyCells.Count; i++) {
+			if(player.energy > i) {
+				energyCells[i].GetComponent<EnergyCell>().Activate(((float)i)/5);
+			} else {
+				energyCells[i].GetComponent<EnergyCell>().Deactivate(0);
+			}
+			
 		}
 	}
 }

@@ -10,11 +10,7 @@ Shader "Custom/Guide"
  
 	SubShader
 	{
-		Stencil {
-	  		Ref 1
-	  		Comp Equal
-			Pass keep 
-   		}
+		
 		Tags
 		{ 
 			"Queue"="Transparent+1" 

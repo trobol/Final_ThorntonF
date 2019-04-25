@@ -9,14 +9,13 @@ public class GridManager : MonoBehaviour
 	public GameObject[,] asteroids;
 	public int width, height;
 
+	public HudController hud;
 
 	GameObject player, alien;
 	public GridTile playerTile, alienTile;
 	GameObject asteroidPrefab;
 
 	public GridRender gridRender;
-
-	public int[] asArray;
 	void Awake()
 	{
 		grid = new Grid(width, height);
@@ -36,7 +35,8 @@ public class GridManager : MonoBehaviour
 
 		asteroids = gridRender.objects;
 
-		asArray = grid.AsArray();
+		hud = Instantiate(Resources.Load<GameObject>("HUD")).GetComponent<HudController>();
+
 	}
 
 	void BuildGrid()
