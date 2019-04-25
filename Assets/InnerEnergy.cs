@@ -10,16 +10,30 @@ public class InnerEnergy : MonoBehaviour
 	Animator animator;
 	void Start()
 	{
-		float rand = Random.Range(0, 1);
+		float rand = Random.Range(0, 1f);
 		GetComponent<Image>().color = Color.Lerp(color1, color2, rand);
-		animator = GetComponent<Animator>();
-		animator.Play("energy", 1, 0f);
+        GetAnimator();
+        
+    }
+    void GetAnimator()
+    {
+        if (animator == null)
+        {
+            animator = gameObject.GetComponent<Animator>();
+        }
+    }
+    
+    // https://docs.unity3d.com/ScriptReference/Animator.Play.html
+    
+    public void Activate()
+    {
+        GetAnimator();
+        animator.SetFloat("direction", 1);
+        animator.Play("energy", 0, 0);
+    }
+	public void Deactivate() {
+        animator.SetFloat("direction", -1);
+        animator.Play("energy", 0, 1);
 	}
-	public void Drain() {
-		animator.Play("energy", -1, 0f);
-		Invoke("TurnOff", 1f);
-	}
-	void TurnOff() {
-		gameObject.SetActive(false);
-	}
+
 }

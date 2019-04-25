@@ -1,5 +1,5 @@
 ﻿
-Shader "Custom/Guide"
+Shader "Custom/Alien"
 {
 	Properties
 	{
@@ -22,8 +22,8 @@ Shader "Custom/Guide"
 		Lighting Off
 		ZWrite Off
 		
-		Blend DstAlpha One  // Additive
-		 // Only render pixels whose value in the stencil buffer equals 1.
+		Blend DstAlpha One 
+		
 	  
 		Pass
 		{
@@ -58,9 +58,8 @@ Shader "Custom/Guide"
 				OUT.vertex = UnityObjectToClipPos(IN.vertex);
 				OUT.texcoord = IN.texcoord;
 				OUT.color = IN.color * _Color;
-				float theta = _Time * 15;
-				OUT.rot.x = sin(theta);
-				OUT.rot.y = cos(theta);
+				
+				
 				
 				return OUT;
 			}
@@ -73,7 +72,8 @@ Shader "Custom/Guide"
 				c.x = round(c.x*80)/80;
 				c.y = round(c.y*80)/80;
 				float dist = length(c);	
-				float b = sin(100*(0.1*dist-_Time*0.5));
+				int dir = sin(_Time*0.5);
+				float b = sin(100*(0.1*dist+_Time*0.5));
 				float a = step(0.6, b)/2;
 
 				a += step(0.95, b)*0.5;
@@ -84,11 +84,8 @@ Shader "Custom/Guide"
 
 				float2 l2 = c;
 
-				float theta = acos(dot(l1, l2) / (length(l1) * length(l2)));
-				
-				float d = step(theta, 0.2)*(0.2-theta)*10;
 				float fade = dist*dist;
-				a += d;
+
 				a -= fade/2;
 				return IN.color * a;
 			}

@@ -29,15 +29,19 @@ public class HudController : MonoBehaviour
 	{
 		if (player.energyPool > energyCells.Count)
 		{
-			for(int i = 0; player.energyPool > energyCells.Count; i++)
-				energyCells.Add(Instantiate(energyCellPrefab, energyContainer.transform));
+            for (int i = 0; player.energyPool > energyCells.Count; i++)
+            {
+               GameObject g = Instantiate(energyCellPrefab, energyContainer.transform);
+                energyCells.Add(g);
+                g.GetComponent<EnergyCell>().Anim(((float)i) / 5);
+            }
 		}
 		
 		for(int i =0; i < energyCells.Count; i++) {
-			if(i < player.energy) {
+			if(player.energy > i) {
 				energyCells[i].GetComponent<EnergyCell>().Activate(((float)i)/5);
 			} else {
-				energyCells[i].GetComponent<EnergyCell>().Deactivate(((float)i) / 5);
+				energyCells[i].GetComponent<EnergyCell>().Deactivate(0);
 			}
 			
 		}
