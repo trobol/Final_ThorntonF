@@ -6,8 +6,8 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: GuideShader
-  m_Shader: {fileID: 4800000, guid: a9493f7b1a76b3c4bbb071758cea6171, type: 3}
+  m_Name: AlienEffectMat
+  m_Shader: {fileID: 4800000, guid: c95b8c0fb9706bb48a3355fd07a3f5ed, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -77,5 +77,5 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0, b: 0, a: 1}
+    - _Color: {r: 0, g: 1, b: 0.2998643, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
