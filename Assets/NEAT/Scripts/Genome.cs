@@ -13,9 +13,8 @@ namespace NEAT
 				preturbChance = 90;
 
 
-		ConnectionGene[] connections;
+		public ConnectionGene[] connections;
 		NodeGene[] nodes;
-		ConnectionGene first, last;
 		public static int inov = 0;
 		public float fitness = 0;
 		public int size, nodeCount = 0;
@@ -56,52 +55,7 @@ namespace NEAT
 			type = nt;
 			BuildNodes();
 		}
-		void BuildNodes()
-		{
-			List<NodeGene> nodeList = new List<NodeGene>();
-			nodeCount += type.inputs + type.outputs;
-			for (int a = 0; a < connections.Length; a++)
-			{
-				NodeGene input = FindNodeGene(connections[a].input, ref nodeList),
-						output = FindNodeGene(connections[a].output, ref nodeList);
 
-
-			}
-
-			//Add input and output node (0 -> type.inputs + type.outputs)
-			for (int i = 0; i < nodeCount; i++)
-			{
-				NodeGene n = new NodeGene(i);
-				n.type = i < type.inputs ? NodeType.input : NodeType.output;
-			}
-		}
-		//nodeList should always be sorted
-		NodeGene FindNodeGene(int id, ref List<NodeGene> nodeList)
-		{
-			//empty list
-			if (nodeList.Count <= 0)
-			{
-				nodeList.Add(new NodeGene(id));
-				return nodeList[0];
-			}
-			for (int i = 0; i < nodeList.Count; i++)
-			{
-				//existing node found
-				if (id == nodeList[i].id)
-				{
-					return nodeList[i];
-				}
-				//list does not contain node
-				else if (id > nodeList[i].id)
-				{
-					nodeList.Insert(i, new NodeGene(id));
-					return nodeList[i];
-				}
-			}
-			//node id is smaller then all nodes in list
-			nodeList.Insert(0, new NodeGene(id));
-			return nodeList[0];
-		}
 		public static Genome Mutate(Genome g0)
 		{
 

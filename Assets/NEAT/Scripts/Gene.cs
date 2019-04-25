@@ -24,7 +24,7 @@ namespace NEAT
 		public int id;
 		public ConnectionGene[] inputs, outputs;
 		public int inputCount, outputCount;
-		public NodeType type;
+		public Node.Type type;
 		public NodeGene(int i)
 		{
 			id = i;
